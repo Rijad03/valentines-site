@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Happy Valentine’s Day</title>
+
+  <style>
+    :root{
+      --bg1:#2a0008;      /* dark red */
+      --bg2:#4b0013;      /* slightly brighter red */
+      --card:#140007cc;   /* translucent deep */
+      --text:#fff3f6;
+      --muted:#ffd6df;
+      --shadow: 0 18px 45px rgba(0,0,0,.45);
+      --radius: 22px;
+      --border: 1px solid rgba(255, 190, 206, .22);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      background:
+        radial-gradient(1000px 700px at 20% 15%, rgba(255, 77, 122, .25), transparent 60%),
+        radial-gradient(900px 650px at 80% 25%, rgba(255, 0, 76, .18), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(255, 124, 155, .16), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+
+    /* Floating hearts layer */
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    /* SVG hearts (crisp, no visual glitches) */
+    .heart {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      opacity: .65;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,.35));
+      animation: floatUp linear infinite;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    @keyframes floatUp {
+      from { transform: translate3d(0, 110vh, 0) scale(1); }
+      to   { transform: translate3d(40px, -140px, 0) scale(1.05); }
+    }
+
+    main{
+      position: relative;
+      z-index: 2;
+      padding: 42px 16px 42px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+
+    /* Layout: images around a center message card */
+    .wrap{
+      width: min(1050px, 100%);
+      display:grid;
+      gap: 18px;
+      grid-template-columns: 1fr 1.25fr 1fr;
+      grid-template-areas:
+        "img1 card img2"
+        "img1 card img2"
+        "img3 card img2";
+      align-items: stretch;
+    }
+
+    .card{
+      grid-area: card;
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 22px;
+      backdrop-filter: blur(10px);
+    }
+
+    h1{
+      margin: 0 0 10px 0;
+      font-size: clamp(20px, 2.4vw, 28px);
+      letter-spacing: .2px;
+    }
+
+    .message{
+      margin:0;
+      line-height: 1.6;
+      color: var(--muted);
+      white-space: pre-wrap; /* keeps your letter formatting */
+      font-size: 15.5px;
+    }
+
+    .photo{
+      border-radius: var(--radius);
+      overflow:hidden;
+      border: var(--border);
+      background: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .photo img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.02);
+    }
+
+    .photo::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(900px 500px at 50% 0%, rgba(255, 123, 155, .12), transparent 60%);
+      pointer-events:none;
+    }
+
+    .img1{ grid-area: img1; min-height: 330px; }
+    .img2{ grid-area: img2; min-height: 330px; }
+    .img3{ grid-area: img3; min-height: 210px; }
+
+    footer{
+      position: relative;
+      z-index: 2;
+      text-align:center;
+      padding: 0 16px 28px;
+      color: rgba(255, 214, 223, .75);
+      font-size: 13px;
+    }
+
+    /* Responsive: stack nicely on small screens */
+    @media (max-width: 900px){
+      .wrap{
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "card card"
+          "img1 img2"
+          "img3 img3";
+      }
+      .img1, .img2 { min-height: 260px; }
+      .img3 { min-height: 220px; }
+    }
+
+    @media (max-width: 520px){
+      .wrap{
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "card"
+          "img1"
+          "img2"
+          "img3";
+      }
+      .img1, .img2, .img3 { min-height: 240px; }
+    }
+
+    /* ===== Password Gate (no tips, no visible password) ===== */
+    .gate {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background:
+        radial-gradient(1000px 700px at 20% 15%, rgba(255, 77, 122, .25), transparent 60%),
+        radial-gradient(900px 650px at 80% 25%, rgba(255, 0, 76, .18), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(255, 124, 155, .16), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+
+    .gate-card{
+      width: min(520px, 100%);
+      background: var(--card);
+      border: var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 22px 18px;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      position: relative;
+      z-index: 6;
+    }
+
+    .gate-title{
+      margin: 0 0 14px 0;
+      font-size: clamp(18px, 2.2vw, 24px);
+      letter-spacing: .2px;
+      line-height: 1.35;
+    }
+
+    .gate-row{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .gate input{
+      width: min(340px, 100%);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 190, 206, .28);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      outline: none;
+      font-size: 15px;
+    }
+
+    .gate input::placeholder{
+      color: rgba(255, 214, 223, .65);
+    }
+
+    .gate button{
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 190, 206, .28);
+      background: rgba(255, 175, 196, .12);
+      color: var(--text);
+      font-weight: 650;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+
+    .gate button:hover{
+      transform: translateY(-1px);
+      background: rgba(255, 175, 196, .18);
+    }
+
+    .gate-error{
+      margin: 12px 0 0 0;
+      min-height: 20px;
+      color: #ffd1da;
+      opacity: 0;
+      transition: opacity .15s ease;
+      font-size: 14px;
+    }
+    .gate-error.show{ opacity: 1; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <!-- Password Gate -->
+  <div class="gate" id="gate">
+    <div class="hearts" id="gateHearts"></div>
+
+    <div class="gate-card" role="dialog" aria-label="Password page">
+      <h2 class="gate-title">Enter the date of the start of our journey to continue 💌</h2>
+
+      <div class="gate-row">
+        <input
+          id="gateInput"
+          type="text"
+          inputmode="text"
+          placeholder="Enter date"
+          autocomplete="off"
+          aria-label="Enter date"
+        />
+        <button id="gateBtn" type="button">Continue</button>
+      </div>
+
+      <p class="gate-error" id="gateError">Not quite — try again ❤️</p>
+    </div>
+  </div>
+
+  <!-- floating hearts (main page) -->
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Main Content (hidden until correct password) -->
+  <div id="mainContent" class="hidden">
+    <main>
+      <section class="wrap" id="valentine" aria-label="Valentine layout">
+        <figure class="photo img1">
+          <img src="Irene1.JPG" alt="Photo 1" />
+        </figure>
+
+        <article class="card" role="article" aria-label="Love letter">
+          <h1>Happy Valentine’s Day ❤️</h1>
+          <p class="message">Dear Irene,
+	Words cannot describe how unconditionally happy I am that you have finally, after a long process of the invisible string theory, become a part of my life. The love that I have learned to share with you is something that I will only ever be able to experience with you. Although our distance kills and times become tough, I would not want it any other way. For the distances has shown me how much of a stone you are in my life and it has shown me that your love is worth every second of the distance. From the moment I dropped you into the side of a building (sorry), to now and in the future, I know I will love you from the bottom of my heart. 
+
+	Although we cannot be together for Valentines Day (fuck PWC), there isn't a day where I cant show you my love and appreciation for you. You are my stone, my love, and my everything, and I am more than the happiest man alive to get to be a part of your life. I miss you endlessly and I cant wait for the day we get to be together. No matter if it is tomorrow, after tomorrow, or 2 months from now, you are worth waiting for. You are brilliant, beautiful, hilarious, ambitious, and all the good things in the world
+
+I love you so much and Happy Valentines Day &lt;3
+
+Your one and only,
+Rijad</p>
+        </article>
+
+        <figure class="photo img2">
+          <img src="Irene2.jpeg" alt="Photo 2" />
+        </figure>
+
+        <figure class="photo img3">
+          <img src="Irene3.JPEG" alt="Photo 3" />
+        </figure>
+      </section>
+    </main>
+
+    <footer>
+      Made with love. ❤️
+    </footer>
+  </div>
+
+  <script>
+    // ===== Hearts Generator (SVG; crisp at any size) =====
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    function heartDataUrl(color){
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29.6">
+          <path fill="${color}" d="M23.6,0c-3,0-5.6,1.7-7.6,4C14,1.7,11.4,0,8.4,0C3.8,0,0,3.8,0,8.4
+          c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+        </svg>
+      `.trim();
+
+      return `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+    }
+
+    function spawnHearts(containerId, count){
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = "";
+
+      for (let i = 0; i < count; i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+
+        const size = rand(14, 34);
+        h.style.width = size + "px";
+        h.style.height = size + "px";
+
+        const hue = rand(345, 360);
+        const sat = rand(75, 98);
+        const light = rand(45, 62);
+        const color = `hsl(${hue} ${sat}% ${light}%)`;
+
+        h.style.backgroundImage = heartDataUrl(color);
+
+        h.style.left = rand(0, 100) + "vw";
+        h.style.animationDuration = rand(7, 16) + "s";
+        h.style.animationDelay = (-rand(0, 16)) + "s";
+        h.style.opacity = rand(0.35, 0.8);
+
+        container.appendChild(h);
+      }
+    }
+
+    // hearts behind the gate and on main page (main starts after unlock)
+    spawnHearts("gateHearts", 26);
+
+    // ===== Password Gate Logic (no plain-text password in source) =====
+    // We normalize the input to YYYY-MM-DD, then compare SHA-256 hashes.
+    // (This keeps the actual date from appearing plainly in the code.)
+    const TARGET_HASH_HEX = "ae629d34fcca0237177c248e2b9988cddcff2671828a11b7a47ef0b75aaf7c12";
+
+    function normalizeInputToYMD(str){
+      if (!str) return null;
+      const s = str.trim().replace(/\s+/g, " ");
+
+      // Try native Date parsing for inputs like "June 1, 2025"
+      const t = Date.parse(s);
+      if (!Number.isNaN(t)) {
+        const dt = new Date(t);
+        const y = dt.getFullYear();
+        const m = String(dt.getMonth() + 1).padStart(2, "0");
+        const d = String(dt.getDate()).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+      }
+
+      // mm/dd/yyyy or m/d/yyyy (also allow - or .)
+      const mdy = s.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+      if (mdy){
+        const m = String(Number(mdy[1])).padStart(2, "0");
+        const d = String(Number(mdy[2])).padStart(2, "0");
+        const y = String(Number(mdy[3]));
+        return `${y}-${m}-${d}`;
+      }
+
+      // yyyy-mm-dd
+      const ymd = s.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})$/);
+      if (ymd){
+        const y = String(Number(ymd[1]));
+        const m = String(Number(ymd[2])).padStart(2, "0");
+        const d = String(Number(ymd[3])).padStart(2, "0");
+        return `${y}-${m}-${d}`;
+      }
+
+      return null;
+    }
+
+    async function sha256Hex(text){
+      const enc = new TextEncoder().encode(text);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,"0")).join("");
+    }
+
+    function unlock(){
+      document.getElementById("gate").classList.add("hidden");
+      document.getElementById("mainContent").classList.remove("hidden");
+      spawnHearts("hearts", 30);
+    }
+
+    function showError(){
+      const e = document.getElementById("gateError");
+      e.classList.add("show");
+      window.clearTimeout(showError._t);
+      showError._t = window.setTimeout(() => e.classList.remove("show"), 1400);
+    }
+
+    async function tryUnlock(){
+      const raw = document.getElementById("gateInput").value;
+      const ymd = normalizeInputToYMD(raw);
+      if (!ymd) return showError();
+
+      const hash = await sha256Hex(ymd);
+      if (hash === TARGET_HASH_HEX) unlock();
+      else showError();
+    }
+
+    document.getElementById("gateBtn").addEventListener("click", () => { tryUnlock(); });
+    document.getElementById("gateInput").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") tryUnlock();
+    });
+  </script>
+</body>
+</html>
